@@ -1060,8 +1060,6 @@ BaseCache::access(PacketPtr pkt, CacheBlk *&blk, Cycles &lat,
         // populate the time when the block will be ready to access.
         blk->whenReady = clockEdge(fillLatency) + pkt->headerDelay +
             pkt->payloadDelay;
-        // if this a write-through packet it will be sent to cache
-        // below
         return !pkt->writeThrough();
     } else if (blk && (pkt->needsWritable() ? blk->isWritable() :
                        blk->isReadable())) {
@@ -1078,8 +1076,6 @@ BaseCache::access(PacketPtr pkt, CacheBlk *&blk, Cycles &lat,
         return true;
     }
 
-    // Can't satisfy access normally... either no block (blk == nullptr)
-    // or have block but need writable
 
     incMissCount(pkt);
 
